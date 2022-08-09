@@ -12,21 +12,55 @@
     />
   </head>
   <body>
-    <audio id="bgm" style="display: none" controls>
-      <source src="./audio/universe-space-sounds-3595.mp3" type="audio/flac" />
+    <audio id="bgm" style="display: none">
+      <source
+        muted="true"
+        src="./audio/Epic Trailer Music - Free To Use Music -  'Nobility' (Prod. Sirius Beat) Dramatic Victory Adventure.mp4"
+        type="audio/flac"
+      />
       Your browser does not support the audio element.
     </audio>
     <audio id="platformSound" style="display: none" controls>
       <source
-        src="./audio/mixkit-falling-on-metal-roof-752.wav"
+        src="./audio/mixkit-falling-on-metal-roof-752 (mp3cut (mp3cut.net).wav"
+        type="audio/flac"
+      />
+      Your browser does not support the audio element.
+    </audio>
+    <audio id="fallingSound" style="display: none" controls>
+      <source src="" type="audio/flac" />
+      Your browser does not support the audio element.
+    </audio>
+    <audio id="gameOver" style="display: none" controls>
+      <source
+        src="./audio/universe-space-sounds-3595 (mp3cut.net).mp3"
         type="audio/flac"
       />
       Your browser does not support the audio element.
     </audio>
 
+    <div id="instructionsModal" class="modal" style="display: block">
+      <div class="modal-content">
+        <h1>Instructions</h1>
+        <h3>How to play</h3>
+        <p></p>
+        <p></p>
+        <p>Controls</p>
+        <p></p>
+        <p></p>
+        <div class="start-button">
+          <img
+            src="images/SeekPng.com_launch-png_2391677.png"
+            alt=""
+            class="button-image"
+            alt="PlayButton"
+          />
+        </div>
+      </div>
+    </div>
+
     <div class="container">
       <div id="score"></div>
-      <button id="music">MUTE</button>
       <canvas id="game" width="375" height="375"></canvas>
       <div id="instruction">Hold down the mouse to stretch out a stick</div>
       <div id="perfectTarget">DOUBLE SCORE</div>

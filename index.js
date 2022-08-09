@@ -1,13 +1,3 @@
-// Extend the base functionality of JavaScript
-Array.prototype.last = function () {
-  return this[this.length - 1];
-};
-
-// A sinus function that acceps degrees instead of radians
-Math.sinus = function (degree) {
-  return Math.sin((degree / 180) * Math.PI);
-};
-
 // Todo To fix - instruction message after reset
 
 //todo create a pop-up as starting page
@@ -22,13 +12,13 @@ let sceneOffset; // change the scene after moving
 let platforms = [];
 let sticks = [];
 
-//Todo Add background music, sound effects to "platform", "perfectTargetSize" and "falling"
+// Add background music, sound effects to "platform", "perfectTargetSize" and "falling"
 
 let score = 0;
-let music = "MUTE";
+let music = "MUTE"; // not yet working
 
-const charImg = new Image();
-charImg.src = "./images/spaceHero.png";
+let modal = document.getElementById("instructionsModal");
+modal.style.display = "block";
 
 // Configurations - Set size, distance and time
 const canvasWidth = 375;
@@ -40,7 +30,7 @@ const paddingX = 100; // The waiting position of the hero in from the original c
 const perfectTargetSize = 8;
 
 const stretchingSpeed = 4; // Milliseconds it takes to draw a pixel
-const turningSpeed = 4; // Milliseconds it takes to turn a degree
+const turningSpeed = 2; // Milliseconds it takes to turn a degree
 const walkingSpeed = 4;
 const transitioningSpeed = 2;
 const fallingSpeed = 3;
@@ -53,31 +43,49 @@ Array.prototype.findLast = function () {
   return this[this.length - 1];
 };
 
-// Getting the canvas from HTML
+//TOdo creating hero image
+const charImg = new Image();
+charImg.src = "./images/spaceHero.png";
+charImg.addEventListener("load", () => {
+  draw();
+});
+
+//TOdo Getting the canvas from HTML
 const canvas = document.getElementById("game");
 canvas.width = window.innerWidth; // Make the Canvas full screen
 canvas.height = window.innerHeight;
 const ctx = canvas.getContext("2d");
 
-// Getting all Ids from HTML
+//TOdo Getting all Ids from HTML
 const instructionElement = document.getElementById("instruction");
 const perfectTargetElement = document.getElementById("perfectTarget");
 const restartButton = document.getElementById("restart");
 const scoreElement = document.getElementById("score");
 const musicElement = document.getElementById("music");
-const musicBackground = document.getElementById("bgm").play();
+const musicBackground = document.getElementById("bgm");
 const platformSound = document.getElementById("platformSound");
+const fallingSound = document.getElementById("fallingSound");
+const musicGameOver = document.getElementById("gameOver");
+const modalInstructions = document.getElementById("instructionsModal");
+const startButton = document.querySelector(".start-button");
+
 const winButton = document.getElementById("win");
 
-// Initialize layout
-resetGame();
+function startGame() {
+  modalInstructions.style.display = "none";
+  musicBackground.muted = false;
+  musicBackground.play();
+  resetGame();
+}
 
-// Reset game progress
+//TOdo Reseting the game progress
 function resetGame() {
   step = "waiting";
   lastTimestamp = undefined;
   sceneOffset = 0;
   score = 0;
+
+  musicGameOver.pause();
 
   instructionElement.style.opacity = 1;
   perfectTargetElement.style.opacity = 0;
@@ -123,9 +131,9 @@ function generatePlatform() {
   platforms.push({ x, w });
 }
 
-resetGame();
+//  resetGame();
 
-// Creating eventListener of the whole steps of the game
+//TODo Creating eventListeners
 
 // If space is pressed => restart the game
 window.addEventListener("keydown", function (event) {
@@ -162,6 +170,7 @@ window.addEventListener("resize", function (event) {
 
 window.requestAnimationFrame(animate);
 
+//TOdo The game starts here with the loop, creating conditions for each steps
 // The main game loop
 function animate(timestamp) {
   if (!lastTimestamp) {
@@ -180,6 +189,7 @@ function animate(timestamp) {
     }
 
     case "turning": {
+      platformSound.play();
       sticks.findLast().rotation += (timestamp - lastTimestamp) / turningSpeed;
 
       // stop the stick when 90°
@@ -253,14 +263,15 @@ function animate(timestamp) {
       break;
     }
     case "falling": {
-      if (sticks.findLast().rotation < 180)
-        sticks.findLast().rotation +=
-          (timestamp - lastTimestamp) / turningSpeed;
+      if (sticks.findLast().rotation < 180) fallingSound.play();
+      sticks.findLast().rotation += (timestamp - lastTimestamp) / turningSpeed;
 
       spaceHeroY += (timestamp - lastTimestamp) / fallingSpeed;
       const maxspaceHeroY =
         platformHeight + 100 + (window.innerHeight - canvasHeight) / 2;
       if (spaceHeroY > maxspaceHeroY) {
+        musicBackground.pause();
+        musicGameOver.play();
         restartButton.style.display = "block";
         return;
       }
@@ -276,7 +287,6 @@ function animate(timestamp) {
   lastTimestamp = timestamp;
 }
 
-//todo continue here
 // Returns the platform the stick hit (if it didn't hit any stick then return undefined)
 function thePlatformTheStickHits() {
   if (sticks.findLast().rotation != 90)
@@ -323,6 +333,8 @@ function draw() {
   ctx.restore();
 }
 
+startButton.addEventListener("click", startGame);
+
 restartButton.addEventListener("click", function (event) {
   event.preventDefault();
   resetGame();
@@ -335,6 +347,7 @@ winButton.addEventListener("click", function (event) {
   winButton.style.display = "none";
 });
 
+//TOdo Drawing platforms / Hero and Sticks
 function drawPlatforms() {
   platforms.forEach(({ x, w }) => {
     // Draw platform
