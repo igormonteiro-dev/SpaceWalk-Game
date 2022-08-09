@@ -31,6 +31,27 @@ body {
   color: aliceblue;
 }
 
+#buttonPauseAudio {
+  display: inline-block;
+  max-width: 45%;
+  text-align: center;
+  vertical-align: middle;
+  margin-right: 4%;
+  float: right;
+}
+
+#buttonPause {
+  float: right;
+  margin-bottom: 7%;
+  overflow: auto;
+}
+
+#buttonAudio {
+  float: right;
+  margin-bottom: 7%;
+  overflow: auto;
+}
+
 #instruction {
   width: 200px;
   height: 300px;
@@ -47,6 +68,22 @@ body {
 #restart {
   width: 120px;
   height: 120px;
+  position: absolute;
+  margin-bottom: 50px;
+  border-radius: 50%;
+  color: rgb(248, 247, 242);
+  background-color: #121311;
+  border: none;
+  font-weight: 700;
+  font-size: 1.2em;
+  font-family: "Orbitron", sans-serif;
+  display: none;
+  cursor: pointer;
+}
+
+#win {
+  width: 180px;
+  height: 180px;
   position: absolute;
   margin-bottom: 50px;
   border-radius: 50%;

@@ -21,11 +21,11 @@ let spaceHeroY; // Only changes when falling
 let sceneOffset; // change the scene after moving
 let platforms = [];
 let sticks = [];
-let musicMuted = false;
 
 //Todo Add background music, sound effects to "platform", "perfectTargetSize" and "falling"
 
 let score = 0;
+let music = "MUTE";
 
 const charImg = new Image();
 charImg.src = "./images/spaceHero.png";
@@ -64,8 +64,10 @@ const instructionElement = document.getElementById("instruction");
 const perfectTargetElement = document.getElementById("perfectTarget");
 const restartButton = document.getElementById("restart");
 const scoreElement = document.getElementById("score");
+const musicElement = document.getElementById("music");
 const musicBackground = document.getElementById("bgm").play();
 const platformSound = document.getElementById("platformSound");
+const winButton = document.getElementById("win");
 
 // Initialize layout
 resetGame();
@@ -192,10 +194,16 @@ function animate(timestamp) {
           score += perfectTargetSize ? 2 : 1;
           scoreElement.innerText = score;
 
+          if (score >= 5) {
+            winButton.style.display = "block";
+            return;
+          }
+
           if (perfectTargetSize) {
             perfectTargetElement.style.opacity = 1;
             setTimeout(() => (perfectTargetElement.style.opacity = 0), 1000);
           }
+
           // generate new platforms
           generatePlatform();
         }
@@ -319,6 +327,12 @@ restartButton.addEventListener("click", function (event) {
   event.preventDefault();
   resetGame();
   restartButton.style.display = "none";
+});
+
+winButton.addEventListener("click", function (event) {
+  event.preventDefault();
+  resetGame();
+  winButton.style.display = "none";
 });
 
 function drawPlatforms() {
