@@ -10,6 +10,7 @@ let sticks = [];
 let score = 0;
 let modal = document.getElementById("instructionsModal");
 modal.style.display = "block";
+let animId = null;
 
 const canvasWidth = 375;
 const canvasHeight = 375;
@@ -121,10 +122,68 @@ function generatePlatform() {
   platforms.push({ x, w });
 }
 
+//TOdo The main game loop
+function animate(timestamp) {
+  if (animId === undefined) {
+    return;
+  }
+  console.log(animId);
+  musicBackground.play();
+  if (!lastTimestamp) {
+    lastTimestamp = timestamp;
+    window.requestAnimationFrame(animate);
+    return;
+  }
+
+  // Creating conditions for each step
+  switch (step) {
+    case "waiting":
+      return; // Stop the loop
+    case "stretching": {
+      stretchingStep(timestamp);
+      break;
+    }
+    case "turning": {
+      const isGameWon = turningStep(timestamp);
+
+      if (isGameWon) {
+        cancelAnimationFrame(animId);
+        return;
+      }
+      break;
+    }
+    case "walking": {
+      walkingStep(timestamp);
+      break;
+    }
+    case "transitioning": {
+      transitioningStep(timestamp);
+      break;
+    }
+    case "falling": {
+      const isGameLost = fallingStep(timestamp);
+
+      if (isGameLost) {
+        cancelAnimationFrame(animId);
+        return;
+      }
+      break;
+    }
+    default:
+      throw Error("Wrong step");
+  }
+
+  draw();
+  animId = window.requestAnimationFrame(animate);
+
+  lastTimestamp = timestamp;
+}
+
 //TOdo Creating conditions for each steps
 
 function stretchingStep(timestamp) {
   sticks.last().length += (timestamp - lastTimestamp) / stretchingSpeed;
+  console.log(timestamp);
 }
 
 function turningStep(timestamp) {
@@ -143,9 +202,9 @@ function turningStep(timestamp) {
       score += perfectTargetSize ? 2 : 1;
       scoreElement.innerText = score;
 
-      if (score >= 10) {
+      if (score >= 3) {
         winButton.style.display = "block";
-        return;
+        return true;
       }
 
       if (perfectTargetSize) {
@@ -210,52 +269,8 @@ function fallingStep(timestamp) {
     musicBackground.pause();
     musicGameOver.play();
     restartButton.style.display = "block";
-    return;
+    return true;
   }
-}
-
-//TOdo The main game loop
-
-function animate(timestamp) {
-  musicBackground.play();
-  if (!lastTimestamp) {
-    lastTimestamp = timestamp;
-    window.requestAnimationFrame(animate);
-    return;
-  }
-
-  // Creating conditions for each step
-  switch (step) {
-    case "waiting":
-      return; // Stop the loop
-    case "stretching": {
-      stretchingStep(timestamp);
-      break;
-    }
-    case "turning": {
-      turningStep(timestamp);
-      break;
-    }
-    case "walking": {
-      walkingStep(timestamp);
-      break;
-    }
-    case "transitioning": {
-      transitioningStep(timestamp);
-      break;
-    }
-    case "falling": {
-      fallingStep(timestamp);
-      break;
-    }
-    default:
-      throw Error("Wrong step");
-  }
-
-  draw();
-  window.requestAnimationFrame(animate);
-
-  lastTimestamp = timestamp;
 }
 
 //TOdo Returns the platform the stick hit (if it didn't hit any stick then return undefined)
@@ -367,7 +382,6 @@ window.addEventListener("keydown", function (event) {
 
 // StartingPoint => stretching "MOUSE-DOWN"
 window.addEventListener("mousedown", function (event) {
-  //console.log(event.target, event.currentTarget);
   if (event.target.classList.contains("mute")) {
     return;
   }
