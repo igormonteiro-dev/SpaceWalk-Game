@@ -66,11 +66,11 @@ const ctx = canvas.getContext("2d");
 function startGame() {
   modalInstructions.style.display = "none";
   musicBackground.play();
-  resetGame();
+  updateCanvas();
 }
 
 //TOdo Reseting the game progress
-function resetGame() {
+function updateCanvas() {
   musicGameOver.pause();
   step = "waiting";
   lastTimestamp = undefined;
@@ -120,8 +120,6 @@ function generatePlatform() {
 
   platforms.push({ x, w });
 }
-
-//  resetGame();
 
 //TOdo Creating conditions for each steps
 // The main game loop
@@ -293,7 +291,7 @@ function draw() {
 window.addEventListener("keydown", function (event) {
   if (event.key === " ") {
     event.preventDefault();
-    resetGame();
+    updateCanvas();
     return;
   }
 });
@@ -337,13 +335,13 @@ muteButton.addEventListener("click", function (event) {
 
 restartButton.addEventListener("click", function (event) {
   event.preventDefault();
-  resetGame();
+  updateCanvas();
   restartButton.style.display = "none";
 });
 
 winButton.addEventListener("click", function (event) {
   event.preventDefault();
-  resetGame();
+  updateCanvas();
   winButton.style.display = "none";
 });
 
