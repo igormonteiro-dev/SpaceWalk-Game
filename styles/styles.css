@@ -9,6 +9,10 @@ body {
   cursor: pointer;
 }
 
+p {
+  font-size: 1rem;
+}
+
 .container {
   display: flex;
   justify-content: center;
@@ -17,7 +21,7 @@ body {
 }
 
 #game {
-  background-image: url("/images/space_background.jpg");
+  background-image: url("../images/space_background.jpg");
   background-position: center;
   background-size: cover;
 }
@@ -29,6 +33,13 @@ body {
   font-size: 3.5em;
   font-weight: 900;
   color: aliceblue;
+}
+
+#muteBtn img {
+  position: absolute;
+  width: 30px;
+  top: 60px;
+  left: 60px;
 }
 
 #instruction {
@@ -97,10 +108,10 @@ body {
   text-align: center;
   background-color: #203239;
   color: white;
-  margin: 15% auto;
-  padding: 50px;
+  margin: 5% auto;
+  padding: 20px;
   border: 1px solid #888;
-  width: 50%;
+  width: 70%;
 }
 .modal-content input[type="text"] {
   background-color: #f4e1a7;

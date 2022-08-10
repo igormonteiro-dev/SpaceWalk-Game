@@ -1,8 +1,6 @@
-// Todo To fix - instruction message after reset
-
-//todo create a pop-up as starting page
-
 // Todo Define rules of the game
+// Todo Add falling sound effect
+// FIX Mute button
 
 let step = "waiting"; // stretching | turning | walking | transitioning | falling
 let lastTimestamp; // The timestamp of the previous requestAnimationFrame
@@ -15,12 +13,12 @@ let sticks = [];
 // Add background music, sound effects to "platform", "perfectTargetSize" and "falling"
 
 let score = 0;
-let music = "MUTE"; // not yet working
+//let music = "MUTE"; // not yet working
 
 let modal = document.getElementById("instructionsModal");
 modal.style.display = "block";
 
-// Configurations - Set size, distance and time
+//Todo Configurations - Set size, distances and time
 const canvasWidth = 375;
 const canvasHeight = 375;
 const platformHeight = 130;
@@ -50,12 +48,6 @@ charImg.addEventListener("load", () => {
   draw();
 });
 
-//TOdo Getting the canvas from HTML
-const canvas = document.getElementById("game");
-canvas.width = window.innerWidth; // Make the Canvas full screen
-canvas.height = window.innerHeight;
-const ctx = canvas.getContext("2d");
-
 //TOdo Getting all Ids from HTML
 const instructionElement = document.getElementById("instruction");
 const perfectTargetElement = document.getElementById("perfectTarget");
@@ -68,9 +60,17 @@ const fallingSound = document.getElementById("fallingSound");
 const musicGameOver = document.getElementById("gameOver");
 const modalInstructions = document.getElementById("instructionsModal");
 const startButton = document.querySelector(".start-button");
+const muteButton = document.getElementById("muteBtn");
 
 const winButton = document.getElementById("win");
 
+//TOdo Getting the canvas from HTML
+const canvas = document.getElementById("game");
+canvas.width = window.innerWidth; // Make the Canvas full screen
+canvas.height = window.innerHeight;
+const ctx = canvas.getContext("2d");
+
+//TOdo The game starts here
 function startGame() {
   modalInstructions.style.display = "none";
   musicBackground.muted = false;
@@ -80,12 +80,11 @@ function startGame() {
 
 //TOdo Reseting the game progress
 function resetGame() {
+  musicGameOver.pause();
   step = "waiting";
   lastTimestamp = undefined;
   sceneOffset = 0;
   score = 0;
-
-  musicGameOver.pause();
 
   instructionElement.style.opacity = 1;
   perfectTargetElement.style.opacity = 0;
@@ -170,9 +169,10 @@ window.addEventListener("resize", function (event) {
 
 window.requestAnimationFrame(animate);
 
-//TOdo The game starts here with the loop, creating conditions for each steps
+//TOdo Creating conditions for each steps
 // The main game loop
 function animate(timestamp) {
+  musicBackground.play();
   if (!lastTimestamp) {
     lastTimestamp = timestamp;
     window.requestAnimationFrame(animate);
@@ -204,7 +204,7 @@ function animate(timestamp) {
           score += perfectTargetSize ? 2 : 1;
           scoreElement.innerText = score;
 
-          if (score >= 5) {
+          if (score >= 10) {
             winButton.style.display = "block";
             return;
           }
@@ -334,6 +334,12 @@ function draw() {
 }
 
 startButton.addEventListener("click", startGame);
+
+//FIX when click the button it shouldn't affect the game
+
+muteButton.addEventListener("click", function (event) {
+  musicBackground.muted = true;
+});
 
 restartButton.addEventListener("click", function (event) {
   event.preventDefault();
