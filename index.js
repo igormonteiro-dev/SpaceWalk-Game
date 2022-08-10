@@ -26,8 +26,8 @@ const walkingSpeed = 4;
 const transitioningSpeed = 2;
 const fallingSpeed = 3;
 
-const spaceHeroWidth = 55;
-const spaceHeroHeight = 60;
+const spaceHeroWidth = 65;
+const spaceHeroHeight = 70;
 
 // Extend the base functionality of JavaScript
 Array.prototype.last = function () {
@@ -38,6 +38,9 @@ Array.prototype.last = function () {
 
 const charImg = new Image();
 charImg.src = "./images/spaceHero.png";
+
+let imgTex = new Image();
+imgTex.src = "./images/metal2.jpg";
 
 //TOdo Getting all Ids and classes from HTML
 
@@ -237,6 +240,7 @@ function walkingStep(timestamp) {
     const maxspaceHeroX =
       sticks.last().x + sticks.last().length + spaceHeroWidth;
     if (spaceHeroX > maxspaceHeroX) {
+      fallingSound.play();
       spaceHeroX = maxspaceHeroX;
       step = "falling";
     }
@@ -259,8 +263,8 @@ function transitioningStep(timestamp) {
 }
 
 function fallingStep(timestamp) {
-  if (sticks.last().rotation < 180) fallingSound.play();
-  sticks.last().rotation += (timestamp - lastTimestamp) / turningSpeed;
+  if (sticks.last().rotation < 180)
+    sticks.last().rotation += (timestamp - lastTimestamp) / turningSpeed;
 
   spaceHeroY += (timestamp - lastTimestamp) / fallingSpeed;
   const maxspaceHeroY =
@@ -317,8 +321,8 @@ function draw() {
 
 function drawPlatforms() {
   platforms.forEach(({ x, w }) => {
-    // Draw platform
-    ctx.fillStyle = "#131312";
+    let patt = ctx.createPattern(imgTex, "repeat");
+    ctx.fillStyle = patt;
     ctx.fillRect(
       x,
       canvasHeight - platformHeight,
@@ -363,6 +367,7 @@ function drawSticks() {
     ctx.lineWidth = 2;
     ctx.moveTo(0, 0);
     ctx.lineTo(0, -stick.length);
+    ctx.strokeStyle = "#f0f2f4";
     ctx.stroke();
 
     // Restore transformations

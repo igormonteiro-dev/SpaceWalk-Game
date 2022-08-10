@@ -27,7 +27,7 @@ p {
 }
 
 #game {
-  background-image: url("../images/space_background.jpg");
+  background-image: url("../images/1.jpeg");
   background-position: center;
   background-size: cover;
 }
@@ -58,7 +58,7 @@ p {
   font-family: "Orbitron", sans-serif;
   text-align: center;
   transition: opacity 2s;
-  color: rgb(20, 20, 21);
+  color: #f0f2f4;
 }
 
 #restart {
@@ -99,6 +99,7 @@ p {
   height: 170px;
   opacity: 0;
   transition: opacity 2s;
+  color: aliceblue;
 }
 
 .modal {
