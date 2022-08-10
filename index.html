@@ -49,10 +49,10 @@
           away the next platform is.
         </p>
         <p>
-          - If your stick lands on the white dot on the next platform you get a
+          * If your stick lands on the white dot on the next platform you get a
           double score.
         </p>
-        <p>- Be careful, if the stick is not long enough, you will fall!</p>
+        <p>* Be careful, if the stick is not long enough, you will fall!</p>
         <p>* You can press M to mute your game</p>
         <br />
         <p><strong>You win when you reach 10 points!</strong></p>
@@ -70,10 +70,10 @@
 
     <div class="container">
       <div id="score"></div>
-      <div id="muteBtn">
+      <canvas id="game" width="375" height="375"></canvas>
+      <div id="muteBtn" style="display: none">
         <img class="mute" src="./images/mute.png" alt="mute" />
       </div>
-      <canvas id="game" width="375" height="375"></canvas>
       <div id="instruction">Hold down the mouse to stretch out a stick</div>
       <div id="perfectTarget">DOUBLE SCORE</div>
       <button id="restart">RESTART</button>

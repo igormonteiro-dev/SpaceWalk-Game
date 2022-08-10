@@ -63,9 +63,8 @@ const ctx = canvas.getContext("2d");
 
 //TOdo The game starts here
 function startGame() {
-  musicBackground.play();
   modalInstructions.style.display = "none";
-  muteButton.style.display = "block";
+  musicBackground.play();
   updateCanvas();
 }
 
@@ -123,98 +122,7 @@ function generatePlatform() {
 
 //TOdo Creating conditions for each steps
 
-function stretchingStep(timestamp) {
-  sticks.last().length += (timestamp - lastTimestamp) / stretchingSpeed;
-}
-
-function turningStep(timestamp) {
-  platformSound.play();
-  sticks.last().rotation += (timestamp - lastTimestamp) / turningSpeed;
-
-  // stop the stick when 90°
-
-  if (sticks.last().rotation > 90) {
-    sticks.last().rotation = 90;
-
-    // If perfectTargetSize increase score
-    const [nextPlatform, perfectTargetSize] = theplatformHits();
-    if (nextPlatform) {
-      // Increase score
-      score += perfectTargetSize ? 2 : 1;
-      scoreElement.innerText = score;
-
-      if (score >= 10) {
-        winButton.style.display = "block";
-        return;
-      }
-
-      if (perfectTargetSize) {
-        perfectTargetElement.style.opacity = 1;
-        setTimeout(() => (perfectTargetElement.style.opacity = 0), 1000);
-      }
-
-      // generate new platforms
-      generatePlatform();
-    }
-    // back to the startingPoint
-    step = "walking";
-  }
-}
-
-function walkingStep(timestamp) {
-  spaceHeroX += (timestamp - lastTimestamp) / walkingSpeed;
-
-  const [nextPlatform] = theplatformHits();
-
-  // // If the player reachs another platform, so "transitioning", else "falling"
-  if (nextPlatform) {
-    const maxspaceHeroX =
-      nextPlatform.x + nextPlatform.w - spaceHeroDistanceFromEdge;
-    if (spaceHeroX > maxspaceHeroX) {
-      spaceHeroX = maxspaceHeroX;
-      step = "transitioning";
-    }
-  } else {
-    const maxspaceHeroX =
-      sticks.last().x + sticks.last().length + spaceHeroWidth;
-    if (spaceHeroX > maxspaceHeroX) {
-      spaceHeroX = maxspaceHeroX;
-      step = "falling";
-    }
-  }
-}
-
-function transitioningStep(timestamp) {
-  sceneOffset += (timestamp - lastTimestamp) / transitioningSpeed;
-  // the game changes the scene
-  const [nextPlatform] = theplatformHits();
-  if (sceneOffset > nextPlatform.x + nextPlatform.w - paddingX) {
-    // Add the next step
-    sticks.push({
-      x: nextPlatform.x + nextPlatform.w,
-      length: 0,
-      rotation: 0,
-    });
-    step = "waiting"; // back to the startingPoint
-  }
-}
-
-function fallingStep(timestamp) {
-  if (sticks.last().rotation < 180) fallingSound.play();
-  sticks.last().rotation += (timestamp - lastTimestamp) / turningSpeed;
-
-  spaceHeroY += (timestamp - lastTimestamp) / fallingSpeed;
-  const maxspaceHeroY =
-    platformHeight + 100 + (window.innerHeight - canvasHeight) / 2;
-  if (spaceHeroY > maxspaceHeroY) {
-    musicBackground.pause();
-    musicGameOver.play();
-    restartButton.style.display = "block";
-    return;
-  }
-}
-
-//TOdo The main game loop
+// The main game loop
 
 function animate(timestamp) {
   musicBackground.play();
@@ -229,23 +137,97 @@ function animate(timestamp) {
     case "waiting":
       return; // Stop the loop
     case "stretching": {
-      stretchingStep(timestamp);
+      sticks.last().length += (timestamp - lastTimestamp) / stretchingSpeed;
       break;
     }
+
     case "turning": {
-      turningStep(timestamp);
+      platformSound.play();
+      sticks.last().rotation += (timestamp - lastTimestamp) / turningSpeed;
+
+      // stop the stick when 90°
+
+      if (sticks.last().rotation > 90) {
+        sticks.last().rotation = 90;
+
+        // If perfectTargetSize increase score
+        const [nextPlatform, perfectTargetSize] = theplatformHits();
+        if (nextPlatform) {
+          // Increase score
+          score += perfectTargetSize ? 2 : 1;
+          scoreElement.innerText = score;
+
+          if (score >= 10) {
+            winButton.style.display = "block";
+            return;
+          }
+
+          if (perfectTargetSize) {
+            perfectTargetElement.style.opacity = 1;
+            setTimeout(() => (perfectTargetElement.style.opacity = 0), 1000);
+          }
+
+          // generate new platforms
+          generatePlatform();
+        }
+        // back to the startingPoint
+        step = "walking";
+      }
       break;
     }
+
+    // // If the player reachs another platform, so "transitioning", else "falling"
     case "walking": {
-      walkingStep(timestamp);
+      spaceHeroX += (timestamp - lastTimestamp) / walkingSpeed; //todo better understanding this
+
+      const [nextPlatform] = theplatformHits();
+      if (nextPlatform) {
+        const maxspaceHeroX =
+          nextPlatform.x + nextPlatform.w - spaceHeroDistanceFromEdge;
+        if (spaceHeroX > maxspaceHeroX) {
+          spaceHeroX = maxspaceHeroX;
+          step = "transitioning";
+        }
+      } else {
+        const maxspaceHeroX =
+          sticks.last().x + sticks.last().length + spaceHeroWidth; //todo better understanding this
+        if (spaceHeroX > maxspaceHeroX) {
+          spaceHeroX = maxspaceHeroX;
+          step = "falling";
+        }
+      }
       break;
     }
+
+    // the game changes the scene
     case "transitioning": {
-      transitioningStep(timestamp);
+      sceneOffset += (timestamp - lastTimestamp) / transitioningSpeed;
+
+      const [nextPlatform] = theplatformHits();
+      if (sceneOffset > nextPlatform.x + nextPlatform.w - paddingX) {
+        // Add the next step
+        sticks.push({
+          x: nextPlatform.x + nextPlatform.w,
+          length: 0,
+          rotation: 0,
+        });
+        step = "waiting"; // back to the startingPoint
+      }
       break;
     }
     case "falling": {
-      fallingStep(timestamp);
+      if (sticks.last().rotation < 180) fallingSound.play();
+      sticks.last().rotation += (timestamp - lastTimestamp) / turningSpeed;
+
+      spaceHeroY += (timestamp - lastTimestamp) / fallingSpeed;
+      const maxspaceHeroY =
+        platformHeight + 100 + (window.innerHeight - canvasHeight) / 2;
+      if (spaceHeroY > maxspaceHeroY) {
+        musicBackground.pause();
+        musicGameOver.play();
+        restartButton.style.display = "block";
+        return;
+      }
       break;
     }
     default:
@@ -258,7 +240,7 @@ function animate(timestamp) {
   lastTimestamp = timestamp;
 }
 
-//TOdo Returns the platform the stick hit (if it didn't hit any stick then return undefined)
+// Returns the platform the stick hit (if it didn't hit any stick then return undefined)
 function theplatformHits() {
   if (sticks.last().rotation != 90)
     throw Error(`Stick is ${sticks.last().rotation}°`);
@@ -279,8 +261,6 @@ function theplatformHits() {
   return [platformHits, false];
 }
 
-//TOdo Drawing platforms / Hero and Sticks
-
 function draw() {
   ctx.save();
   ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
@@ -300,6 +280,64 @@ function draw() {
   ctx.restore();
 }
 
+//TODo Creating eventListeners
+
+// If space is pressed => restart the game
+window.addEventListener("keydown", function () {
+  if (event.key === " ") {
+    updateCanvas();
+    return;
+  }
+});
+
+// StartingPoint => stretching "MOUSE-DOWN"
+window.addEventListener("mousedown", function (event) {
+  //console.log(event.target, event.currentTarget);
+  if (event.target.classList.contains("mute")) {
+    return;
+  }
+  if (step === "waiting") {
+    lastTimestamp = undefined;
+    instructionElement.style.opacity = 0;
+    step = "stretching";
+    window.requestAnimationFrame(animate);
+  }
+});
+
+// stretching => rotate "MOUSE-UP"
+window.addEventListener("mouseup", function () {
+  if (step === "stretching") {
+    step = "turning";
+  }
+});
+
+// resizing
+window.addEventListener("resize", function () {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  draw();
+});
+
+startButton.addEventListener("click", startGame);
+
+muteButton.addEventListener("click", function () {
+  musicBackground.muted = true;
+  platformSound.muted = true;
+  fallingSound.muted = true;
+  musicGameOver.muted = true;
+});
+
+restartButton.addEventListener("click", function () {
+  updateCanvas();
+  restartButton.style.display = "none";
+});
+
+winButton.addEventListener("click", function () {
+  updateCanvas();
+  winButton.style.display = "none";
+});
+
+//TOdo Drawing platforms / Hero and Sticks
 function drawPlatforms() {
   platforms.forEach(({ x, w }) => {
     // Draw platform
@@ -354,60 +392,3 @@ function drawSticks() {
     ctx.restore();
   });
 }
-
-//TODo Creating eventListeners
-
-// If space is pressed => restart the game
-window.addEventListener("keydown", function (event) {
-  if (event.key === " ") {
-    updateCanvas();
-    return;
-  }
-});
-
-// StartingPoint => stretching "MOUSE-DOWN"
-window.addEventListener("mousedown", function (event) {
-  //console.log(event.target, event.currentTarget);
-  if (event.target.classList.contains("mute")) {
-    return;
-  }
-  if (step === "waiting") {
-    lastTimestamp = undefined;
-    instructionElement.style.opacity = 0;
-    step = "stretching";
-    window.requestAnimationFrame(animate);
-  }
-});
-
-// stretching => rotate "MOUSE-UP"
-window.addEventListener("mouseup", function () {
-  if (step === "stretching") {
-    step = "turning";
-  }
-});
-
-// resizing
-window.addEventListener("resize", function () {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  draw();
-});
-
-startButton.addEventListener("click", startGame);
-
-muteButton.addEventListener("click", function () {
-  musicBackground.muted = true;
-  platformSound.muted = true;
-  fallingSound.muted = true;
-  musicGameOver.muted = true;
-});
-
-restartButton.addEventListener("click", function () {
-  updateCanvas();
-  restartButton.style.display = "none";
-});
-
-winButton.addEventListener("click", function () {
-  updateCanvas();
-  winButton.style.display = "none";
-});
