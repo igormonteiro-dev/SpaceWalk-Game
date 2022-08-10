@@ -1,6 +1,4 @@
-// Todo Define rules of the game
-// Todo Add falling sound effect
-// FIX Mute button
+//Todo Configurations - creating variables
 
 let step = "waiting"; // stretching | turning | walking | transitioning | falling
 let lastTimestamp; // The timestamp of the previous requestAnimationFrame
@@ -9,16 +7,10 @@ let spaceHeroY; // Only changes when falling
 let sceneOffset; // change the scene after moving
 let platforms = [];
 let sticks = [];
-
-// Add background music, sound effects to "platform", "perfectTargetSize" and "falling"
-
 let score = 0;
-//let music = "MUTE"; // not yet working
-
 let modal = document.getElementById("instructionsModal");
 modal.style.display = "block";
 
-//Todo Configurations - Set size, distances and time
 const canvasWidth = 375;
 const canvasHeight = 375;
 const platformHeight = 130;
@@ -42,26 +34,29 @@ Array.prototype.findLast = function () {
 };
 
 //TOdo creating hero image
+
 const charImg = new Image();
 charImg.src = "./images/spaceHero.png";
 
-//TOdo Getting all Ids from HTML
+//TOdo Getting all Ids and classes from HTML
+
+const modalInstructions = document.getElementById("instructionsModal");
+const startButton = document.querySelector(".start-button");
 const instructionElement = document.getElementById("instruction");
 const perfectTargetElement = document.getElementById("perfectTarget");
 const restartButton = document.getElementById("restart");
 const scoreElement = document.getElementById("score");
 const musicElement = document.getElementById("music");
 const musicBackground = document.getElementById("bgm");
+musicBackground.muted = false;
+const winButton = document.getElementById("win");
 const platformSound = document.getElementById("platformSound");
 const fallingSound = document.getElementById("fallingSound");
 const musicGameOver = document.getElementById("gameOver");
-const modalInstructions = document.getElementById("instructionsModal");
-const startButton = document.querySelector(".start-button");
 const muteButton = document.getElementById("muteBtn");
 
-const winButton = document.getElementById("win");
-
 //TOdo Getting the canvas from HTML
+
 const canvas = document.getElementById("game");
 canvas.width = window.innerWidth; // Make the Canvas full screen
 canvas.height = window.innerHeight;
@@ -70,7 +65,6 @@ const ctx = canvas.getContext("2d");
 //TOdo The game starts here
 function startGame() {
   modalInstructions.style.display = "none";
-  musicBackground.muted = false;
   musicBackground.play();
   resetGame();
 }
@@ -306,6 +300,10 @@ window.addEventListener("keydown", function (event) {
 
 // StartingPoint => stretching "MOUSE-DOWN"
 window.addEventListener("mousedown", function (event) {
+  //console.log(event.target, event.currentTarget);
+  if (event.target.classList.contains("mute")) {
+    return;
+  }
   if (step === "waiting") {
     lastTimestamp = undefined;
     instructionElement.style.opacity = 0;
@@ -329,8 +327,6 @@ window.addEventListener("resize", function (event) {
 });
 
 startButton.addEventListener("click", startGame);
-
-//FIX when click the button it shouldn't affect the game
 
 muteButton.addEventListener("click", function (event) {
   musicBackground.muted = true;
