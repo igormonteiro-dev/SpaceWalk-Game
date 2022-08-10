@@ -44,9 +44,6 @@ Array.prototype.findLast = function () {
 //TOdo creating hero image
 const charImg = new Image();
 charImg.src = "./images/spaceHero.png";
-charImg.addEventListener("load", () => {
-  draw();
-});
 
 //TOdo Getting all Ids from HTML
 const instructionElement = document.getElementById("instruction");
@@ -131,43 +128,6 @@ function generatePlatform() {
 }
 
 //  resetGame();
-
-//TODo Creating eventListeners
-
-// If space is pressed => restart the game
-window.addEventListener("keydown", function (event) {
-  if (event.key === " ") {
-    event.preventDefault();
-    resetGame();
-    return;
-  }
-});
-
-// StartingPoint => stretching "MOUSE-DOWN"
-window.addEventListener("mousedown", function (event) {
-  if (step === "waiting") {
-    lastTimestamp = undefined;
-    instructionElement.style.opacity = 0;
-    step = "stretching";
-    window.requestAnimationFrame(animate);
-  }
-});
-
-// stretching => rotate "MOUSE-UP"
-window.addEventListener("mouseup", function (event) {
-  if (step === "stretching") {
-    step = "turning";
-  }
-});
-
-// resizing
-window.addEventListener("resize", function (event) {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  draw();
-});
-
-window.requestAnimationFrame(animate);
 
 //TOdo Creating conditions for each steps
 // The main game loop
@@ -333,12 +293,50 @@ function draw() {
   ctx.restore();
 }
 
+//TODo Creating eventListeners
+
+// If space is pressed => restart the game
+window.addEventListener("keydown", function (event) {
+  if (event.key === " ") {
+    event.preventDefault();
+    resetGame();
+    return;
+  }
+});
+
+// StartingPoint => stretching "MOUSE-DOWN"
+window.addEventListener("mousedown", function (event) {
+  if (step === "waiting") {
+    lastTimestamp = undefined;
+    instructionElement.style.opacity = 0;
+    step = "stretching";
+    window.requestAnimationFrame(animate);
+  }
+});
+
+// stretching => rotate "MOUSE-UP"
+window.addEventListener("mouseup", function (event) {
+  if (step === "stretching") {
+    step = "turning";
+  }
+});
+
+// resizing
+window.addEventListener("resize", function (event) {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  draw();
+});
+
 startButton.addEventListener("click", startGame);
 
 //FIX when click the button it shouldn't affect the game
 
 muteButton.addEventListener("click", function (event) {
   musicBackground.muted = true;
+  platformSound.muted = true;
+  fallingSound.muted = true;
+  musicGameOver.muted = true;
 });
 
 restartButton.addEventListener("click", function (event) {
@@ -357,7 +355,7 @@ winButton.addEventListener("click", function (event) {
 function drawPlatforms() {
   platforms.forEach(({ x, w }) => {
     // Draw platform
-    ctx.fillStyle = "#121311";
+    ctx.fillStyle = "#131312";
     ctx.fillRect(
       x,
       canvasHeight - platformHeight,
