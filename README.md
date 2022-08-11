@@ -1,4 +1,4 @@
-# Space Hero By Igor M.
+# SpaceWalk By Igor M.
 
 # Key features
 
