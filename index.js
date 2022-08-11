@@ -12,7 +12,7 @@ let modal = document.getElementById("instructionsModal");
 modal.style.display = "block";
 let animId = null;
 let baseImage = new Image();
-baseImage.src = "images/spaceText.png";
+baseImage.src = "images/240_F_407626301_2nt4OGB5g9UPK4IM8ZMXi8EtnT6QE167.jpeg";
 
 const canvasWidth = 375;
 const canvasHeight = 375;
@@ -58,7 +58,10 @@ musicBackground.muted = false;
 const winButton = document.getElementById("win");
 const platformSound = document.getElementById("platformSound");
 const fallingSound = document.getElementById("fallingSound");
+const problemMusic = document.getElementById("problemSound");
+const doubleScore = document.getElementById("doubleScoreMusic");
 const musicGameOver = document.getElementById("gameOver");
+const winMusic = document.getElementById("winGame");
 const muteButton = document.getElementById("muteBtn");
 
 //TOdo Getting the canvas from HTML
@@ -147,6 +150,8 @@ function animate(timestamp) {
   }
   //console.log(animId);
   musicBackground.play();
+  winGame.pause();
+  problemMusic.pause();
   if (!lastTimestamp) {
     lastTimestamp = timestamp;
     window.requestAnimationFrame(animate);
@@ -221,10 +226,12 @@ function turningStep(timestamp) {
 
       if (platforms.indexOf(nextPlatform) === 5) {
         winButton.style.display = "block";
+        winGame.play();
         return true;
       }
 
       if (perfectTargetSize) {
+        doubleScore.play();
         perfectTargetElement.style.opacity = 1;
         setTimeout(() => (perfectTargetElement.style.opacity = 0), 1000);
       }
@@ -286,6 +293,7 @@ function fallingStep(timestamp) {
   if (spaceHeroY > maxspaceHeroY) {
     musicBackground.pause();
     musicGameOver.play();
+    problemMusic.play();
     restartButton.style.display = "block";
     return true;
   }
@@ -450,6 +458,8 @@ muteButton.addEventListener("click", function () {
   platformSound.muted = true;
   fallingSound.muted = true;
   musicGameOver.muted = true;
+  winGame.muted = true;
+  problemMusic.muted = true;
 });
 
 restartButton.addEventListener("click", function () {

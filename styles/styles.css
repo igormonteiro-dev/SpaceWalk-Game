@@ -16,7 +16,7 @@ p {
 }
 
 .logo {
-  width: 200px;
+  width: 300px;
 }
 
 .container {
@@ -115,7 +115,9 @@ p {
 .modal-content {
   text-align: center;
   line-height: 20px;
-  background-color: #203239;
+  background-color: #39192c;
+  background-image: url("../images/abstract-luxury-gradient-blue-background-smooth-dark-blue-with-black-vignette-studio-banner.jpg");
+  background-size: cover;
   color: white;
   margin: 5% auto;
   padding: 20px;

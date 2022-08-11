@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Space Hero</title>
     <link rel="stylesheet" href="./styles/styles.css" />
     <link
       rel="stylesheet"
@@ -27,13 +27,32 @@
       />
       Your browser does not support the audio element.
     </audio>
+    <audio id="doubleScoreMusic" style="display: none" controls>
+      <source src="./audio/success.mp3" type="audio/flac" />
+      Your browser does not support the audio element.
+    </audio>
     <audio id="fallingSound" style="display: none" controls>
       <source src="audio/scream.mp3" type="audio/flac" />
       Your browser does not support the audio element.
     </audio>
+    <audio id="problemSound" style="display: none" controls>
+      <source
+        src="audio/Houston, we have a problem (mp3cut.net).mp3"
+        type="audio/flac"
+      />
+      Your browser does not support the audio element.
+    </audio>
+
     <audio id="gameOver" style="display: none" controls>
       <source
         src="./audio/universe-space-sounds-3595 (mp3cut.net).mp3"
+        type="audio/flac"
+      />
+      Your browser does not support the audio element.
+    </audio>
+    <audio id="winGame" style="display: none" controls>
+      <source
+        src="./audio/ASTRONAUT - SOUND (mp3cut.net).mp3"
         type="audio/flac"
       />
       Your browser does not support the audio element.
@@ -53,10 +72,8 @@
           double score.
         </p>
         <p>* Be careful, if the stick is not long enough, you will fall!</p>
-        <p>* You can press M to mute your game</p>
         <br />
         <p><strong>Your goal? Back to the space station alive!</strong></p>
-        <p>For that, you must reach 10 points!</p>
 
         <div class="start-button">
           <img
