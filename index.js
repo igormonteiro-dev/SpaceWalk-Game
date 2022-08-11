@@ -11,6 +11,8 @@ let score = 0;
 let modal = document.getElementById("instructionsModal");
 modal.style.display = "block";
 let animId = null;
+let baseImage = new Image();
+baseImage.src = "images/spaceText.png";
 
 const canvasWidth = 375;
 const canvasHeight = 375;
@@ -74,6 +76,11 @@ function startGame() {
   updateCanvas();
 }
 
+// if (platforms.length === 5) {
+//   winButton.style.display = "block";
+//   return true;
+// }
+
 //TOdo Updating and reseting the game progress
 function updateCanvas() {
   musicGameOver.pause();
@@ -92,6 +99,10 @@ function updateCanvas() {
   platforms = [{ x: 50, w: 50 }];
   generatePlatform();
   generatePlatform();
+  generatePlatform();
+
+  // if generatePlatform reach 10 than stop animation
+  // add new draw with the space station to get in
 
   // Reset sticks
   sticks = [{ x: platforms[0].x + platforms[0].w, length: 0, rotation: 0 }];
@@ -99,12 +110,13 @@ function updateCanvas() {
   // Reset spaceHero
   spaceHeroX = platforms[0].x + platforms[0].w - spaceHeroDistanceFromEdge;
   spaceHeroY = 0;
-
   draw();
+  animate();
 }
 
 // Function to generate Platform randomly
 function generatePlatform() {
+  if (platforms.length > 5) return;
   const minimumGap = 40;
   const maximumGap = 250;
   const minimumWidth = 30;
@@ -121,7 +133,11 @@ function generatePlatform() {
   const w =
     minimumWidth + Math.floor(Math.random() * (maximumWidth - minimumWidth));
 
-  platforms.push({ x, w });
+  let base = null;
+  if (platforms.length === 5) {
+    base = baseImage;
+  }
+  platforms.push({ x, w, baseImage: base });
 }
 
 //TOdo The main game loop
@@ -129,7 +145,7 @@ function animate(timestamp) {
   if (animId === undefined) {
     return;
   }
-  console.log(animId);
+  //console.log(animId);
   musicBackground.play();
   if (!lastTimestamp) {
     lastTimestamp = timestamp;
@@ -185,7 +201,6 @@ function animate(timestamp) {
 
 function stretchingStep(timestamp) {
   sticks.last().length += (timestamp - lastTimestamp) / stretchingSpeed;
-  console.log(timestamp);
 }
 
 function turningStep(timestamp) {
@@ -204,7 +219,7 @@ function turningStep(timestamp) {
       score += perfectTargetSize ? 2 : 1;
       scoreElement.innerText = score;
 
-      if (score >= 6) {
+      if (platforms.indexOf(nextPlatform) === 5) {
         winButton.style.display = "block";
         return true;
       }
@@ -319,9 +334,26 @@ function draw() {
 }
 
 function drawPlatforms() {
-  platforms.forEach(({ x, w }) => {
-    let patt = ctx.createPattern(imgTex, "repeat");
-    ctx.fillStyle = patt;
+  platforms.forEach(({ x, w, baseImage }) => {
+    if (!baseImage) {
+      let patt = ctx.createPattern(imgTex, "repeat");
+      ctx.fillStyle = patt;
+      ctx.fillRect(
+        x,
+        canvasHeight - platformHeight,
+        w,
+        platformHeight + (window.innerHeight - canvasHeight) / 2
+      );
+    } else {
+      let patt2 = ctx.createPattern(baseImage, "repeat");
+      ctx.fillStyle = patt2;
+      ctx.fillRect(
+        x,
+        canvasHeight - platformHeight,
+        w,
+        platformHeight + (window.innerHeight - canvasHeight) / 2
+      );
+    }
     ctx.fillRect(
       x,
       canvasHeight - platformHeight,
@@ -421,13 +453,11 @@ muteButton.addEventListener("click", function () {
 });
 
 restartButton.addEventListener("click", function () {
-  updateCanvas();
+  startGame();
   restartButton.style.display = "none";
 });
 
 winButton.addEventListener("click", function () {
-  updateCanvas();
+  startGame();
   winButton.style.display = "none";
 });
-
-function restartGame() {}
