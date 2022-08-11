@@ -78,13 +78,14 @@ p {
 }
 
 #win {
-  width: 180px;
-  height: 180px;
+  width: 350px;
+  height: 350px;
   position: absolute;
   margin-bottom: 50px;
   border-radius: 50%;
   color: rgb(248, 247, 242);
-  background-color: #121311;
+  background-image: url("../images/youAreSafe.png");
+  background-size: cover;
   border: none;
   font-weight: 700;
   font-size: 1.4em;
@@ -113,6 +114,7 @@ p {
 
 .modal-content {
   text-align: center;
+  line-height: 20px;
   background-color: #203239;
   color: white;
   margin: 5% auto;

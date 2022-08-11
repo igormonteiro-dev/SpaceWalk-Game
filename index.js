@@ -39,6 +39,7 @@ Array.prototype.last = function () {
 const charImg = new Image();
 charImg.src = "./images/spaceHero.png";
 
+//TOdo creating patterns to platform
 let imgTex = new Image();
 imgTex.src = "./images/metal2.jpg";
 
@@ -89,8 +90,6 @@ function updateCanvas() {
   // Display the first platform which is always the same
   // x + w has to match paddingX
   platforms = [{ x: 50, w: 50 }];
-  generatePlatform();
-  generatePlatform();
   generatePlatform();
   generatePlatform();
 
@@ -205,7 +204,7 @@ function turningStep(timestamp) {
       score += perfectTargetSize ? 2 : 1;
       scoreElement.innerText = score;
 
-      if (score >= 3) {
+      if (score >= 6) {
         winButton.style.display = "block";
         return true;
       }
@@ -430,3 +429,5 @@ winButton.addEventListener("click", function () {
   updateCanvas();
   winButton.style.display = "none";
 });
+
+function restartGame() {}
