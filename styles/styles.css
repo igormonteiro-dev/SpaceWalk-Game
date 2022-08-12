@@ -13,10 +13,11 @@ p {
   font-family: Helvetica, sans-serif;
   font-size: 1rem;
   font-weight: 200;
+  color: aliceblue;
 }
 
 .logo {
-  width: 300px;
+  width: 400px;
 }
 
 .container {
@@ -115,10 +116,9 @@ p {
 .modal-content {
   text-align: center;
   line-height: 20px;
-  background-color: #39192c;
-  background-image: url("../images/abstract-luxury-gradient-blue-background-smooth-dark-blue-with-black-vignette-studio-banner.jpg");
-  background-size: cover;
-  color: white;
+  background-color: #341d32;
+  opacity: 0, 5;
+  color: rgb(235, 222, 71);
   margin: 5% auto;
   padding: 20px;
   border: 1px solid #888;
