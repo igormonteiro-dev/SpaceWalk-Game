@@ -16,4 +16,4 @@ Your goal? Back to the space station alive!
 - Create 2 more levels
 - Make the game responsive
 
-### [Game Demo](https://igormonteiro-dev.github.io/spaceHero-Game/)
+### [Game Demo](https://igormonteiro-dev.github.io/SpaceWalk-Game/)
