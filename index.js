@@ -62,6 +62,7 @@ const problemMusic = document.getElementById("problemSound");
 const doubleScore = document.getElementById("doubleScoreMusic");
 const musicGameOver = document.getElementById("gameOver");
 const winMusic = document.getElementById("winGame");
+const winGameMusic = document.getElementById("winGameMusic");
 const muteButton = document.getElementById("muteBtn");
 
 //TOdo Getting the canvas from HTML
@@ -151,7 +152,11 @@ function animate(timestamp) {
   //console.log(animId);
   musicBackground.play();
   winGame.pause();
+  winGame.currentTime = 0;
+  winGameMusic.pause();
+  winGameMusic.currentTime = 0;
   problemMusic.pause();
+  problemMusic.currentTime = 0;
   if (!lastTimestamp) {
     lastTimestamp = timestamp;
     window.requestAnimationFrame(animate);
@@ -226,6 +231,8 @@ function turningStep(timestamp) {
 
       if (platforms.indexOf(nextPlatform) === 5) {
         winButton.style.display = "block";
+        musicBackground.pause();
+        winGameMusic.play();
         winGame.play();
         return true;
       }
@@ -456,10 +463,12 @@ startButton.addEventListener("click", startGame);
 muteButton.addEventListener("click", function () {
   musicBackground.muted = true;
   platformSound.muted = true;
+  doubleScore.muted = true;
   fallingSound.muted = true;
   musicGameOver.muted = true;
   winGame.muted = true;
   problemMusic.muted = true;
+  winGameMusic.muted = true;
 });
 
 restartButton.addEventListener("click", function () {
